@@ -30,7 +30,7 @@ contract('SKUToken', function ([producer, shipper, delivery, hacker]) {
       assert.equal(await skuToken.owner(), producer)
       assert.equal(await skuToken.candidateOwner(), shipper)
 
-      await assertRevert(skuToken.claimOwnership({from: hacker}))
+      await assertRevert(skuToken.takeOwnership({from: hacker}))
   })
 
   it('does not let anyone but the owner create SKUs', async function () {
@@ -56,7 +56,7 @@ contract('SKUToken', function ([producer, shipper, delivery, hacker]) {
       assert.equal(await skuToken.owner(), producer)
       assert.equal(await skuToken.candidateOwner(), shipper)
 
-      await skuToken.claimOwnership({from: shipper})
+      await skuToken.takeOwnership({from: shipper})
 
       assert.equal(await skuToken.owner(), shipper)
 

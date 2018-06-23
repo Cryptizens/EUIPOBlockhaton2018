@@ -51,8 +51,8 @@ contract SKUToken is ERC721Stripped, Transferrable, MetaDatable {
     tokenBarCodes[_skuId] = _barCode;
   }
 
-  function claimOwnership() public {
-    super._claimOwnership();
+  function takeOwnership() public {
+    super._takeOwnership();
     if (productionAllowed_) {
       productionAllowed_ = false;
     }

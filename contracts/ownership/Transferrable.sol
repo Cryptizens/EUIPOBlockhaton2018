@@ -48,7 +48,7 @@ contract Transferrable is Ownable {
     candidateOwner = address(0);
   }
 
-  function _claimOwnership() internal {
+  function _takeOwnership() internal {
     require(msg.sender == candidateOwner);
     owner = msg.sender;
     emit OwnershipTransferred(owner, msg.sender);

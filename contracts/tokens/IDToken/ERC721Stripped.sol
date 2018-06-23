@@ -1,43 +1,44 @@
 pragma solidity ^0.4.23;
 
+import "../../math/SafeMath.sol";
+
 contract ERC721Stripped {
-  string internal name_;
-  string internal symbol_;
+  using SafeMath for uint256;
 
-  // Mapping from owner to list of owned token IDs
-  mapping(address => uint256[]) internal ownedTokens;
-
-  // Mapping from token ID to index of the owner tokens list
-  mapping(uint256 => uint256) internal ownedTokensIndex;
-
-  // Array with all token ids, used for enumeration
   uint256[] internal allTokens;
 
   // Mapping from token id to position in the allTokens array
-  mapping(uint256 => uint256) internal allTokensIndex;
-
+  mapping (uint256 => uint256) internal allTokensIndex;
   mapping (uint256 => address) internal tokenOwner;
-  mapping (uint256 => address) internal tokenApprovals;
   mapping (address => uint256) internal ownedTokensCount;
-  mapping (address => mapping (address => bool)) internal operatorApprovals;
 
   event Transfer(
     address indexed _from,
     address indexed _to,
     uint256 _tokenId
   );
-  event Approval(
-    address indexed _owner,
-    address indexed _approved,
-    uint256 _tokenId
-  );
 
-  function balanceOf(address _owner) public view returns (uint256 _balance);
-  function ownerOf(uint256 _tokenId) public view returns (address _owner);
-  function exists(uint256 _tokenId) public view returns (bool _exists);
+  function totalSupply() public view returns (uint256 _supply) {
+    return allTokens.length;
+  }
 
-  function approve(address _to, uint256 _tokenId) public;
-  function getApproved(uint256 _tokenId) public view returns (address _operator);
+  function ownerOf(uint256 _tokenId) public view returns (address _owner) {
+    return tokenOwner[_tokenId];
+  }
 
-  function transferFrom(address _from, address _to, uint256 _tokenId) public;
+  function exists(uint256 _tokenId) public view returns (bool _exists) {
+    return (ownerOf(_tokenId) != address(0));
+  }
+
+  function _mint(address _to, uint256 _tokenId) internal {
+    require(_to != address(0));
+    addTokenTo(_to, _tokenId);
+    emit Transfer(address(0), _to, _tokenId);
+  }
+
+  function addTokenTo(address _to, uint256 _tokenId) internal {
+    require(tokenOwner[_tokenId] == address(0));
+    tokenOwner[_tokenId] = _to;
+    ownedTokensCount[_to] = ownedTokensCount[_to].add(1);
+  }
 }

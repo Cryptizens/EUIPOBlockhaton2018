@@ -1,14 +1,14 @@
 pragma solidity ^0.4.23;
 
 import "./ERC721Stripped.sol";
-/* import "./Endorsable.sol"; */
+import "./Endorsable.sol";
 import "./MetaDatable.sol";
 
 /**
  * @title ERC721 Non-Fungible Token Standard basic interface
  * @dev see https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md
  */
-contract IDToken is ERC721Stripped, MetaDatable {
+contract IDToken is ERC721Stripped, MetaDatable, Endorsable {
 
   function recordID(uint256 _tokenId, string _name) public {
     super._mint(msg.sender, _tokenId);

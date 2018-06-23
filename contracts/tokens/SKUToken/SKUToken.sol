@@ -47,6 +47,8 @@ contract SKUToken is ERC721Token, Transferrable, MetaDatable {
 
     tokenBarCodes[_skuId] = _barCode;
     tokenDescriptions[_skuId] = _description;
+    tokenOwnersByBarCodes[_barCode] = msg.sender;
+    tokensByBarCodes[_barCode] = _skuId;
   }
 
   function takeOwnership() public {

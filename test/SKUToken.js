@@ -52,8 +52,8 @@ contract('SKUToken', function ([producer, shipper, consumerAlice, consumerBob, h
       await skuToken.recordSKU(skuIds[1], barCodes[1], descriptions[1], { from: producer })
       await skuToken.recordSKU(skuIds[2], barCodes[2], descriptions[2], { from: producer })
 
-      assert(await skuToken.tokenBarCode(skuIds[0]), barCodes[0])
-      assert(await skuToken.tokenDescription(skuIds[0]), descriptions[0])
+      assert.equal(await skuToken.tokenBarCode(skuIds[0]), barCodes[0])
+      assert.equal(await skuToken.tokenDescription(skuIds[0]), descriptions[0])
 
       assert.equal(await skuToken.totalSupply(), 3)
 

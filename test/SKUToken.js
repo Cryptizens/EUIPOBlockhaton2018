@@ -36,16 +36,22 @@ contract('SKUToken', function ([producer, shipper, delivery, hacker]) {
   it('does not let anyone but the owner create SKUs', async function () {
     const skuId = 98765
     const barCode = 'abcde'
+    const description = 'A pair of shoes'
 
-    await assertRevert(skuToken.recordSKU(skuId, barCode, { from: shipper }))
-    await assertRevert(skuToken.recordSKU(skuId, barCode, { from: hacker }))
+    await assertRevert(skuToken.recordSKU(skuId, barCode, description, { from: shipper }))
+    await assertRevert(skuToken.recordSKU(skuId, barCode, description, { from: hacker }))
   })
 
   it('prevents counterfeiting and improves movement of goods for a better world (HAPPY PATH)', async function () {
       // CREATE SKU
       const skuId = 98765
       const barCode = 'abcde'
-      await skuToken.recordSKU(skuId, barCode, { from: producer })
+      const description = 'A pair of shoes'
+
+      await skuToken.recordSKU(skuId, barCode, description, { from: producer })
+
+      assert(await skuToken.tokenBarCode(skuId), barCode)
+      assert(await skuToken.tokenDescription(skuId), description)
 
       assert.equal(await skuToken.totalSupply(), 1)
 
@@ -62,8 +68,8 @@ contract('SKUToken', function ([producer, shipper, delivery, hacker]) {
 
       // CANNOT PRODUCE ANY MORE SKUS AFTER HANDOVER
       assert.equal(await skuToken.productionAllowed(), false)
-      await assertRevert(skuToken.recordSKU(8967897896, 'kljijioji', { from: producer }))
-      await assertRevert(skuToken.recordSKU(6156525443, 'sdhjhyzvv', { from: shipper }))
+      await assertRevert(skuToken.recordSKU(8967897896, 'kljijioji', 'A pair of scissors', { from: producer }))
+      await assertRevert(skuToken.recordSKU(6156525443, 'sdhjhyzvv', 'A pair of donkeys', { from: shipper }))
 
       // VETTING BY THE CUSTOMS - TODO
 

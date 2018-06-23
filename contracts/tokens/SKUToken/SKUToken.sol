@@ -42,13 +42,14 @@ contract SKUToken is ERC721Stripped, Transferrable, MetaDatable {
     return productionAllowed_;
   }
 
-  function recordSKU(uint256 _skuId, string _barCode) public onlyProducer onlyAtProduction {
+  function recordSKU(uint256 _skuId, string _barCode, string _description) public onlyProducer onlyAtProduction {
     super._mint(msg.sender, _skuId);
 
     allTokensIndex[_skuId] = allTokens.length;
     allTokens.push(_skuId);
 
     tokenBarCodes[_skuId] = _barCode;
+    tokenDescriptions[_skuId] = _description;
   }
 
   function takeOwnership() public {

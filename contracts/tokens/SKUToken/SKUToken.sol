@@ -1,10 +1,10 @@
 pragma solidity ^0.4.23;
 
 import "../../ownership/Transferrable.sol";
-import "../ERC721/ERC721Stripped.sol";
+import "../ERC721/ERC721Token.sol";
 import "./MetaDatable.sol";
 
-contract SKUToken is ERC721Stripped, Transferrable, MetaDatable {
+contract SKUToken is ERC721Token, Transferrable, MetaDatable {
 
   // Parent IDToken id (proves association with the brand)
   uint256 internal idTokenId_;
@@ -15,7 +15,7 @@ contract SKUToken is ERC721Stripped, Transferrable, MetaDatable {
   // Can SKUs still be produced? Set to true by default at deployment
   bool internal productionAllowed_ = true;
 
-  constructor (uint256 _idTokenId, string _origin, string _destination) {
+  constructor (uint256 _idTokenId, string _origin, string _destination) public {
     idTokenId_ = _idTokenId;
     origin_ = _origin;
     destination_ = _destination;
@@ -44,9 +44,6 @@ contract SKUToken is ERC721Stripped, Transferrable, MetaDatable {
 
   function recordSKU(uint256 _skuId, string _barCode, string _description) public onlyProducer onlyAtProduction {
     super._mint(msg.sender, _skuId);
-
-    allTokensIndex[_skuId] = allTokens.length;
-    allTokens.push(_skuId);
 
     tokenBarCodes[_skuId] = _barCode;
     tokenDescriptions[_skuId] = _description;

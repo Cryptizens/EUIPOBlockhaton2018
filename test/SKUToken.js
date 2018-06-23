@@ -2,7 +2,7 @@ const assertRevert = require('./helpers/assertRevert')
 
 const SKUToken = artifacts.require('./SKUToken.sol')
 
-contract('SKUToken', function ([producer, shipper, consumer, hacker]) {
+contract('SKUToken', function ([producer, shipper, consumerAlice, consumerBob, hacker]) {
   let skuToken
   let skuTokenAddress
 
@@ -11,7 +11,7 @@ contract('SKUToken', function ([producer, shipper, consumer, hacker]) {
   const destination = 'BE'
 
   beforeEach('setup contract for each test', async function () {
-      skuToken = await SKUToken.new(idTokenId, origin, destination, {from: producer})
+      skuToken = await SKUToken.new(idTokenId, origin, destination, {from: producer, gas: 5000000})
       skuTokenAddress = await skuToken.address
   })
 
@@ -57,7 +57,7 @@ contract('SKUToken', function ([producer, shipper, consumer, hacker]) {
 
       assert.equal(await skuToken.totalSupply(), 3)
 
-      // HANDOVER TO SHIPPER
+      // HANDOVER OF THE SMART CONTRACT FROM PRODUCER TO SHIPPER
       assert.equal(await skuToken.owner(), producer)
       await skuToken.proposeOwnership(shipper)
 
@@ -68,6 +68,11 @@ contract('SKUToken', function ([producer, shipper, consumer, hacker]) {
 
       assert.equal(await skuToken.owner(), shipper)
 
+      // APPROVAL BY THE PRODUCER TO LET SHIPPER TRANSFER SKUS ON THEIR BEHALF
+      await skuToken.setApprovalForAll(shipper, true, { from: producer })
+
+      assert.equal(await skuToken.isApprovedForAll(producer, shipper), true)
+
       // CANNOT PRODUCE ANY MORE SKUS AFTER HANDOVER
       assert.equal(await skuToken.productionAllowed(), false)
       await assertRevert(skuToken.recordSKU(8967897896, 'kljijioji', 'A pair of scissors', { from: producer }))
@@ -75,6 +80,11 @@ contract('SKUToken', function ([producer, shipper, consumer, hacker]) {
 
       // VETTING BY THE CUSTOMS - TODO
 
-      // HANDOVER FROM SHIPPER TO END CONSUMER - TODO
+      // HANDOVER FROM SHIPPER TO END CONSUMER
+      await skuToken.safeTransferFrom(producer, consumerAlice, skuIds[0], { from: shipper })
+      await skuToken.safeTransferFrom(producer, consumerBob, skuIds[1], { from: shipper })
+
+      assert.equal(await skuToken.ownerOf(skuIds[0]), consumerAlice)
+      assert.equal(await skuToken.ownerOf(skuIds[1]), consumerBob)
   })
 })

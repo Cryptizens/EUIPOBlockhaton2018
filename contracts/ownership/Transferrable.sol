@@ -33,12 +33,6 @@ contract Transferrable is Ownable {
     _;
   }
 
-  function transferOwnership(address _newOwner) public onlyOwner {
-    // Prevent this function from being called - we could remove it from
-    // the Ownable interface but prefer to keep it standard.
-    require(false);
-  }
-
   function proposeOwnership (address _candidateOwner) public onlyOwner {
     candidateOwner = _candidateOwner;
     emit OwnershipTransferred(owner, _candidateOwner);

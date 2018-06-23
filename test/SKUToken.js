@@ -2,7 +2,7 @@ const assertRevert = require('./helpers/assertRevert')
 
 const SKUToken = artifacts.require('./SKUToken.sol')
 
-contract('SKUToken', function ([producer, shipper, delivery, hacker]) {
+contract('SKUToken', function ([producer, shipper, consumer, hacker]) {
   let skuToken
   let skuTokenAddress
 
@@ -44,16 +44,18 @@ contract('SKUToken', function ([producer, shipper, delivery, hacker]) {
 
   it('prevents counterfeiting and improves movement of goods for a better world (HAPPY PATH)', async function () {
       // CREATE SKU
-      const skuId = 98765
-      const barCode = 'abcde'
-      const description = 'A pair of shoes'
+      const skuIds = [ 98765, 287373, 19813 ]
+      const barCodes = [ 'abcde', 'ejdjc', 'icush' ]
+      const descriptions = ['A pair of shoes', 'A pair of shoes', 'A pair of shoes']
 
-      await skuToken.recordSKU(skuId, barCode, description, { from: producer })
+      await skuToken.recordSKU(skuIds[0], barCodes[0], descriptions[0], { from: producer })
+      await skuToken.recordSKU(skuIds[1], barCodes[1], descriptions[1], { from: producer })
+      await skuToken.recordSKU(skuIds[2], barCodes[2], descriptions[2], { from: producer })
 
-      assert(await skuToken.tokenBarCode(skuId), barCode)
-      assert(await skuToken.tokenDescription(skuId), description)
+      assert(await skuToken.tokenBarCode(skuIds[0]), barCodes[0])
+      assert(await skuToken.tokenDescription(skuIds[0]), descriptions[0])
 
-      assert.equal(await skuToken.totalSupply(), 1)
+      assert.equal(await skuToken.totalSupply(), 3)
 
       // HANDOVER TO SHIPPER
       assert.equal(await skuToken.owner(), producer)

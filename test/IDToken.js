@@ -20,6 +20,6 @@ contract('IDToken', function ([owner, visitor]) {
 
       assert.equal(await idToken.totalSupply(), 1)
       assert.equal(await idToken.tokenName(123456), name)
-      assert.equal(await idToken.nameOwner(name), owner)
+      assert.equal(await idToken.ownerOf(123456), owner)
   })
 })

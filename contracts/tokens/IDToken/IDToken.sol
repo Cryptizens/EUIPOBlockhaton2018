@@ -17,7 +17,6 @@ contract IDToken is ERC721Stripped, MetaDatable {
     allTokens.push(_tokenId);
 
     tokenNames[_tokenId] = _name;
-    nameOwners[_name] = msg.sender;
   }
 
 }

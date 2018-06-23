@@ -1,6 +1,6 @@
 pragma solidity ^0.4.23;
 
-import "./ERC721Stripped.sol";
+import "../ERC721/ERC721Stripped.sol";
 /* import "./Endorsable.sol"; */
 import "./MetaDatable.sol";
 

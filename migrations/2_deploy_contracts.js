@@ -16,7 +16,7 @@ module.exports = function(deployer) {
   })
 
   // Deploy the SKUToken contract
-  deployer.deploy(SKUToken, 12345, 'CN', 'BE').then(async function(instance) {
+  deployer.deploy(SKUToken, 12345, 'CN', 'BE', '6282862688555').then(async function(instance) {
     skuToken = instance;
 
     const skuIds = [ 98765, 287373, 19813 ]

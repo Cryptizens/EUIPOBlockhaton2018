@@ -12,13 +12,16 @@ contract SKUToken is ERC721Token, Transferrable, MetaDatable {
   string internal origin_;
   // Destination country of the bundle of SKUs (ISO Alpha-2, like BE, FR...)
   string internal destination_;
+  // GS1 code of the bundle of SKUs
+  string internal gs1Code_;
   // Can SKUs still be produced? Set to true by default at deployment
   bool internal productionAllowed_ = true;
 
-  constructor (uint256 _idTokenId, string _origin, string _destination) public {
+  constructor (uint256 _idTokenId, string _origin, string _destination, string _gs1Code) public {
     idTokenId_ = _idTokenId;
     origin_ = _origin;
     destination_ = _destination;
+    gs1Code_ = _gs1Code;
   }
 
   modifier onlyAtProduction() {
@@ -36,6 +39,10 @@ contract SKUToken is ERC721Token, Transferrable, MetaDatable {
 
   function getDestination() public view returns (string _destination) {
     return destination_;
+  }
+
+  function getGS1Code() public view returns (string _destination) {
+    return gs1Code_;
   }
 
   function productionAllowed() public view returns (bool _productionAllowed) {

@@ -16,6 +16,7 @@ module.exports = {
   networks: {
     development: {
       host: "localhost",
+      // host: "chain.wac.agency",
       port: 8545,
       network_id: "*", // Match any network id
     }

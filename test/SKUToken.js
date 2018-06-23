@@ -9,9 +9,10 @@ contract('SKUToken', function ([producer, shipper, consumerAlice, consumerBob, h
   const idTokenId = 12345
   const origin = 'CN'
   const destination = 'BE'
+  const gs1Code = '6282862688555'
 
   beforeEach('setup contract for each test', async function () {
-      skuToken = await SKUToken.new(idTokenId, origin, destination, {from: producer, gas: 5000000})
+      skuToken = await SKUToken.new(idTokenId, origin, destination, gs1Code, {from: producer, gas: 5000000})
       skuTokenAddress = await skuToken.address
   })
 
@@ -19,6 +20,7 @@ contract('SKUToken', function ([producer, shipper, consumerAlice, consumerBob, h
       assert.equal(await skuToken.getIDTokenId(), idTokenId)
       assert.equal(await skuToken.getOrigin(), origin)
       assert.equal(await skuToken.getDestination(), destination)
+      assert.equal(await skuToken.getGS1Code(), gs1Code)
       assert.equal(await skuToken.owner(), producer)
       assert.equal(await skuToken.totalSupply(), 0)
       assert.equal(await skuToken.productionAllowed(), true)
